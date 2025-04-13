@@ -159,14 +159,14 @@ document.addEventListener('keydown', e => {
   if (DIRS[e.key]) move(e.key);
 });
 
-document.getElementById('openControl').onclick = () => {
-  const ctrl = document.getElementById('mobileControl');
-  ctrl.style.display = ctrl.style.display === 'flex' ? 'none' : 'flex';
-};
+// document.getElementById('openControl').onclick = () => {
+//   const ctrl = document.getElementById('mobileControl');
+//   ctrl.style.display = ctrl.style.display === 'flex' ? 'none' : 'flex';
+// };
 
-document.querySelectorAll('.control button').forEach(btn => {
-  btn.addEventListener('click', () => move(btn.dataset.dir));
-});
+// document.querySelectorAll('.control button').forEach(btn => {
+//   btn.addEventListener('click', () => move(btn.dataset.dir));
+// });
 
 document.getElementById('resetBtn').onclick = resetLevel;
 document.getElementById('nextBtn').onclick = startNewLevel;
@@ -212,3 +212,6 @@ document.addEventListener("keydown", function (e) {
   }
 });
 document.addEventListener("contextmenu", e => e.preventDefault());
+document.body.addEventListener('touchmove', function (e) {
+  e.preventDefault();
+}, { passive: false });
