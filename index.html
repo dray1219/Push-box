@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>推方塊-無限關卡</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>推方塊-無限關卡</h1>
+  <div class="info" id="info"></div>
+  <div id="game"></div>
+  <button id="resetBtn">🔄 重製</button>
+  <button id="nextBtn" style="display:none;">➡️ 下一關</button>
+
+  <button id="openControl">開啟控制器</button>
+  <div class="control" id="mobileControl">
+    <button data-dir="w">⬆️</button>
+    <div>
+      <button data-dir="a">⬅️</button>
+      <button data-dir="s">⬇️</button>
+      <button data-dir="d">➡️</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

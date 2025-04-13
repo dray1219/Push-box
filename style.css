@@ -1,0 +1,80 @@
+body {
+  font-family: sans-serif;
+  background: #222;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+table {
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+td {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: bold;
+  font-size: 20px;
+  background: #ccc; 
+  color: transparent;
+}
+
+.wall {
+  background: url('images/wall.png') center/cover no-repeat;
+  color: transparent;
+}
+
+.empty {
+  background: #ccc;
+  color: #ccc;
+}
+
+.player {
+  background: url('images/player-Photoroom.png') center/cover no-repeat;
+  color: transparent;
+}
+
+.box {
+  background: url('images/box.png') center/cover no-repeat;
+  color: transparent;
+}
+
+.goal {
+  background: lightgreen;
+  color: white;
+}
+
+.control {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.control button {
+  font-size: 20px;
+  padding: 5px;
+}
+
+#openControl {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+}
+
+.info {
+  margin-top: 10px;
+}
+
+#nextBtn,
+#resetBtn {
+  margin-top: 10px;
+  font-size: 16px;
+  padding: 5px 10px;
+}
