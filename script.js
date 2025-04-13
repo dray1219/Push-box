@@ -3,17 +3,22 @@ let map, player, box, goal;
 let originalPlayer, originalBox;
 let startTime, steps = 0;
 let gameEnded = false;
+let perfectSteps = 0;  
 
 function generateLevel(width = 7, height = 7) {
   while (true) {
     let board = Array.from({ length: height }, () => Array(width).fill('.'));
-    for (let i = 0; i < height; i++) board[i][0] = board[i][width - 1] = '#';
-    for (let j = 0; j < width; j++) board[0][j] = board[height - 1][j] = '#';
+    for (let i = 0; i < height; i++) 
+      board[i][0] = board[i][width - 1] = '#';
+    for (let j = 0; j < width; j++) 
+      board[0][j] = board[height - 1][j] = '#';
 
     let empty = [];
-    for (let i = 1; i < height - 1; i++)
-      for (let j = 1; j < width - 1; j++)
+    for (let i = 1; i < height - 1; i++) {
+      for (let j = 1; j < width - 1; j++) {
         empty.push([i, j]);
+      }
+    }
 
     shuffle(empty);
     player = empty.pop();
@@ -27,7 +32,10 @@ function generateLevel(width = 7, height = 7) {
       }
     }
 
-    if (isSolvable(board, player, box, goal)) return board;
+    if (isSolvable(board, player, box, goal)) {
+      perfectSteps = computeMinimumSteps(board, player, box, goal);
+      return board;
+    }
   }
 }
 
@@ -57,7 +65,7 @@ function isSolvable(board, player, box, goal) {
     for (const [dx, dy] of Object.values(DIRS)) {
       const nbx = bx + dx, nby = by + dy;
       const ppx = bx - dx, ppy = by - dy;
-      if (!inBounds(nbx, nby, w, h) || !inBounds(ppx, ppy, w, h)) continue;
+      if (!inBounds(nbx, nby, w, board.length) || !inBounds(ppx, ppy, w, board.length)) continue;
       if (board[nbx][nby] === '#' || board[ppx][ppy] === '#') continue;
       if (!canReach(board, [px, py], [ppx, ppy], [bx, by])) continue;
       q.push([[bx, by], [nbx, nby]]);
@@ -92,16 +100,50 @@ function inBounds(x, y, w, h) {
   return x >= 0 && x < h && y >= 0 && y < w;
 }
 
+function computeMinimumSteps(board, player, box, goal) {
+  const h = board.length, w = board[0].length;
+  const seen = new Set();
+  const queue = [];
+  queue.push({ px: player[0], py: player[1], bx: box[0], by: box[1], steps: 0 });
+  
+  while (queue.length) {
+    const state = queue.shift();
+    const { px, py, bx, by, steps: cost } = state;
+    if (bx === goal[0] && by === goal[1]) return cost;
+    
+    const key = `${px},${py},${bx},${by}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    for (let d in DIRS) {
+      const [dx, dy] = DIRS[d];
+      const npx = px + dx, npy = py + dy;
+      if (!inBounds(npx, npy, w, h) || board[npx][npy] === '#') continue;
+      if (npx === bx && npy === by) {
+        const nbx = bx + dx, nby = by + dy;
+        if (!inBounds(nbx, nby, w, h) || board[nbx][nby] === '#') continue;
+        queue.push({ px: npx, py: npy, bx: nbx, by: nby, steps: cost + 1 });
+      } else {
+        queue.push({ px: npx, py: npy, bx: bx, by: by, steps: cost + 1 });
+      }
+    }
+  }
+  return Infinity;
+}
+
 function draw() {
   const game = document.getElementById('game');
   game.innerHTML = '<table>' + map.map((row, i) => '<tr>' + row.map((cell, j) => {
     let cls = 'empty', val = '';
-    if (cell === '#') cls = 'wall', val = '';
-    else if (i === player[0] && j === player[1]) cls = 'player', val = '';
-    else if (i === box[0] && j === box[1]) cls = 'box', val = '';
-    else if (i === goal[0] && j === goal[1]) cls = 'goal', val = '';
+    if (cell === '#') cls = 'wall';
+    else if (i === player[0] && j === player[1]) cls = 'player';
+    else if (i === box[0] && j === box[1]) cls = 'box';
+    else if (i === goal[0] && j === goal[1]) cls = 'goal';
     return `<td class="${cls}">${val}</td>`;
   }).join('') + '</tr>').join('') + '</table>';
+  
+  const remaining = Math.max(0, perfectSteps - steps);
+  if (document.getElementById('stepLimit'))
+    document.getElementById('stepLimit').innerText = `剩餘步數：${remaining}`;
 }
 
 function move(dir) {
@@ -128,8 +170,19 @@ function move(dir) {
     const timeUsed = ((Date.now() - startTime) / 1000).toFixed(2);
     document.getElementById('info').innerText = `✅ 過關！用時：${timeUsed} 秒，步數：${steps}`;
     document.getElementById('nextBtn').style.display = 'inline-block';
+    document.getElementById('resetBtn').style.display = 'none';
     gameEnded = true;
   }
+
+  const remaining = Math.max(0, perfectSteps - steps);
+  
+  if (remaining <= 0 && !samePos(box, goal)) {
+    document.getElementById('info').innerText = "❌ 遊戲失敗，步數用完了！";
+    document.getElementById('resetBtn').style.display = 'inline-block';
+    document.getElementById('nextBtn').style.display = 'none';
+    gameEnded = true;
+  }
+  
 }
 
 function resetLevel() {
@@ -140,7 +193,7 @@ function resetLevel() {
   draw();
   document.getElementById('info').innerText = '';
   document.getElementById('nextBtn').style.display = 'none';
-  startTime = Date.now();
+  document.getElementById('resetBtn').style.display = 'inline-block';
 }
 
 function startNewLevel() {
@@ -153,17 +206,18 @@ function startNewLevel() {
   draw();
   document.getElementById('info').innerText = '';
   document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('resetBtn').style.display = 'inline-block';
 }
 
 document.addEventListener('keydown', e => {
   if (DIRS[e.key]) move(e.key);
 });
 
+// 若有手機操控可啟用以下註解區
 // document.getElementById('openControl').onclick = () => {
 //   const ctrl = document.getElementById('mobileControl');
 //   ctrl.style.display = ctrl.style.display === 'flex' ? 'none' : 'flex';
 // };
-
 // document.querySelectorAll('.control button').forEach(btn => {
 //   btn.addEventListener('click', () => move(btn.dataset.dir));
 // });
@@ -172,8 +226,8 @@ document.getElementById('resetBtn').onclick = resetLevel;
 document.getElementById('nextBtn').onclick = startNewLevel;
 
 startNewLevel();
-let touchStartX = 0, touchStartY = 0;
 
+let touchStartX = 0, touchStartY = 0;
 document.addEventListener('touchstart', e => {
   const touch = e.touches[0];
   touchStartX = touch.clientX;
