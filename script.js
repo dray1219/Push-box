@@ -168,14 +168,14 @@ function move(dir) {
   draw();
   if (samePos(box, goal)) {
     const timeUsed = ((Date.now() - startTime) / 1000).toFixed(2);
-    document.getElementById('info').innerText = `✅ 過關！用時：${timeUsed} 秒，步數：${steps}`;
+    document.getElementById('info').innerText = `✅ 過關！用時：${timeUsed} 秒`;
     document.getElementById('nextBtn').style.display = 'inline-block';
     document.getElementById('resetBtn').style.display = 'none';
     gameEnded = true;
   }
 
   const remaining = Math.max(0, perfectSteps - steps);
-  
+
   if (remaining <= 0 && !samePos(box, goal)) {
     document.getElementById('info').innerText = "❌ 遊戲失敗，步數用完了！";
     document.getElementById('resetBtn').style.display = 'inline-block';
@@ -186,6 +186,8 @@ function move(dir) {
 }
 
 function resetLevel() {
+  if (gameEnded && samePos(box, goal)) return;
+
   player = [...originalPlayer];
   box = [...originalBox];
   steps = 0;
@@ -210,7 +212,15 @@ function startNewLevel() {
 }
 
 document.addEventListener('keydown', e => {
-  if (DIRS[e.key]) move(e.key);
+  if (DIRS[e.key]) {
+    move(e.key);
+  } else if (gameEnded && e.key === 'Enter' && samePos(box, goal)) {
+    startNewLevel(); 
+  } else if (e.key === 'r' || e.key === 'R') {
+    if (!gameEnded || !samePos(box, goal)) {
+      resetLevel();
+    }
+  }
 });
 
 // 若有手機操控可啟用以下註解區
