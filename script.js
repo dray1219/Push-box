@@ -7,8 +7,8 @@ let perfectSteps = 0;
 
 function getDifficulty(steps) {
   if (steps < 15) return 'tooEasy';
-  if (steps < 23) return 'easy';
-  if (steps < 30) return 'medium';
+  if (steps < 20) return 'easy';
+  if (steps < 25) return 'medium';
   return 'hard';
 }
 
