@@ -5,7 +5,14 @@ let startTime, steps = 0;
 let gameEnded = false;
 let perfectSteps = 0;  
 
-function generateLevel(width = 7, height = 7) {
+function getDifficulty(steps) {
+  if (steps < 15) return 'tooEasy';
+  if (steps < 23) return 'easy';
+  if (steps < 30) return 'medium';
+  return 'hard';
+}
+
+function generateLevel(width = 7, height = 7, desiredDifficulty = currentDifficulty) {
   while (true) {
     let board = Array.from({ length: height }, () => Array(width).fill('.'));
     for (let i = 0; i < height; i++) 
@@ -33,8 +40,12 @@ function generateLevel(width = 7, height = 7) {
     }
 
     if (isSolvable(board, player, box, goal)) {
-      perfectSteps = computeMinimumSteps(board, player, box, goal);
-      return board;
+      const steps = computeMinimumSteps(board, player, box, goal);
+      const levelDifficulty = getDifficulty(steps);
+      if (levelDifficulty === desiredDifficulty) {
+        perfectSteps = steps;
+        return board;
+      }
     }
   }
 }
@@ -222,15 +233,6 @@ document.addEventListener('keydown', e => {
     }
   }
 });
-
-// 若有手機操控可啟用以下註解區
-// document.getElementById('openControl').onclick = () => {
-//   const ctrl = document.getElementById('mobileControl');
-//   ctrl.style.display = ctrl.style.display === 'flex' ? 'none' : 'flex';
-// };
-// document.querySelectorAll('.control button').forEach(btn => {
-//   btn.addEventListener('click', () => move(btn.dataset.dir));
-// });
 
 document.getElementById('resetBtn').onclick = resetLevel;
 document.getElementById('nextBtn').onclick = startNewLevel;
