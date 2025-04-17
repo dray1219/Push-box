@@ -9,12 +9,12 @@ body {
 
 #gameUI {
   position: fixed;
-  z-index: -1;  /* 在遊戲格子之上，但低於 startUI/difficultyUI */
+  z-index: -1;  
   width: 100vw;
   height: 100vh;
-  background: url('images/brackground_ui.png') no-repeat center center;
+  background: url('images/background.webp') no-repeat center center;
   background-size: contain;
-  display: none; /* 一開始隱藏，選擇完難度後顯示 */
+  display: none;
   pointer-events: none;
 }
 
