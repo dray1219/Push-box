@@ -100,6 +100,18 @@ td {
   color: white;
 }
 
+#resetBtn,#nextBtn{
+  font-size: 20px;
+  padding: 12px 24px;
+  background-color: #ccc;
+  border: none;
+  border-radius: 30px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Quicksand', sans-serif;
+}
+
 .control {
   position: fixed;
   bottom: 10px;
