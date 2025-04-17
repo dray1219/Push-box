@@ -5,6 +5,47 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+
+}
+
+#startUI {
+  position: fixed;
+  z-index: 1000;
+  width: 100vw;
+  height: 100vh;
+  background: url('images/start.webp') no-repeat center center;
+  background-size: contain;
+  background-color: black;
+}
+
+#playBtn {
+  position: absolute;
+  background: rgba(255, 255, 255, 0);
+  border: none;
+  cursor: pointer;
+  display: block;
+}
+
+#difficultyUI {
+  position: fixed;
+  z-index: 999;
+  width: 100vw;
+  height: 100vh;
+  background: url('images/difficulty.webp') no-repeat center center;
+  background-size: contain;
+  background-color: black;
+  display: none;
+}
+
+.difficulty-btn {
+  position: absolute;
+  background: rgba(255, 255, 255, 0);
+  border: none;
+  cursor: pointer;
+  display: block;
 }
 
 #gameUI {
@@ -97,16 +138,16 @@ td {
   padding-top: 0;         
 }
 
+#gameWrapper h1 {
+  cursor: default;
+  user-select: none;
+}
+
 #stepLimit {
   font-size: 18px;
   margin-bottom: 10px;
 }
 
-@media (max-width: 767px) {
-  #gameWrapper {
-    padding-top: 80px;
-  }
-}
 #backBtn {
   position: absolute;
   top: 4%;
@@ -118,7 +159,58 @@ td {
   opacity: 0;            
 }
 
-@media screen and (max-width: 400px) {
+/*手機通用(應該吧? */
+#playBtn {
+  top: 57%;
+  left: 20%;
+  width: 60%;
+  height: 12%;
+}
+
+#easyBtn, #middleBtn, #hardBtn {
+  left: 25%;
+  width: 50%;
+  height: 8%;
+}
+
+#easyBtn {
+  top: 40%;
+}
+#middleBtn {
+  top: 50%;
+}
+#hardBtn {
+  top: 60%;
+}
+
+@media screen and (min-width: 360px) and (max-width: 390px) {/* SE */
+  #playBtn {
+    top: 60%;
+    left: 20%;
+    width: 60%;
+    height: 13%;
+  }
+
+  #easyBtn, #middleBtn, #hardBtn {
+    left: 25%;
+    width: 50%;
+    height: 10%;
+  }
+
+  #easyBtn {
+    top: 37%;
+  }
+  #middleBtn {
+    top: 50%;
+  }
+  #hardBtn {
+    top: 63%;
+  }
+
+  #gameWrapper {
+    padding-top: 30px;
+  }
+
   #backBtn {
     top: 11%;
     left: 6%;
@@ -127,7 +219,34 @@ td {
   }
 }
 
-@media screen and (min-width: 380px) and (max-width: 395px) {
+@media screen and (min-width: 400px) and (max-width: 490px) { /*XR */
+  #playBtn {
+    top: 58%;
+    left: 20%;
+    width: 60%;
+    height: 10%;
+  }
+
+  #easyBtn, #middleBtn, #hardBtn {
+    left: 25%;
+    width: 50%;
+    height: 9%;
+  }
+
+  #easyBtn {
+    top: 39%;
+  }
+  #middleBtn {
+    top: 49%;
+  }
+  #hardBtn {
+    top: 60%;
+  }
+
+  #gameWrapper {
+    padding-top: 110px;
+  }
+
   #backBtn {
     top: 18%;
     left: 6%;
@@ -136,11 +255,72 @@ td {
   }
 }
 
-@media screen and (min-width: 401px) and (max-width: 500px) {
+@media screen and (min-width: 380px) and (max-width: 395px) { /*12pro */
+  #playBtn {
+    top: 58%;
+    left: 20%;
+    width: 60%;
+    height: 10%;
+  }
+
+  #easyBtn, #middleBtn, #hardBtn {
+    left: 25%;
+    width: 50%;
+    height: 9%;
+  }
+
+  #easyBtn {
+    top: 39%;
+  }
+  #middleBtn {
+    top: 49%;
+  }
+  #hardBtn {
+    top: 60%;
+  }
+
+  #gameWrapper {
+    padding-top: 110px;
+  }
+
   #backBtn {
     top: 18%;
     left: 6%;
     width: 12%;
     height: 5%;
+  }
+  #gameWrapper {
+    padding-top: 100px;
+  }
+  #backBtn {
+    top: 18%;
+    left: 6%;
+    width: 12%;
+    height: 5%;
+  }
+}
+
+@media screen and (min-width: 768px) {/*電腦版 */
+  #playBtn {
+    top: 60%;
+    left: 20%;
+    width: 60%;
+    height: 15%;
+  }
+
+  #easyBtn, #middleBtn, #hardBtn {
+    left: 25%;
+    width: 50%;
+    height: 11%;
+  }
+
+  #easyBtn {
+    top: 35%;
+  }
+  #middleBtn {
+    top: 50%;
+  }
+  #hardBtn {
+    top: 65%;
   }
 }

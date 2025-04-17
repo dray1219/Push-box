@@ -4,6 +4,50 @@ let originalPlayer, originalBox;
 let startTime, steps = 0;
 let gameEnded = false;
 let perfectSteps = 0;  
+let currentDifficulty = 'medium';
+
+document.getElementById('backBtn').addEventListener('click', function () {
+  document.getElementById('gameUI').style.display = 'none';
+  document.getElementById('difficultyUI').style.display = 'block';
+});
+function adjustButtonPosition() {
+  let screenWidth = window.innerWidth;
+  let screenHeight = window.innerHeight;
+
+  let easyBtn = document.getElementById('easyBtn');
+  let middleBtn = document.getElementById('middleBtn');
+  let hardBtn = document.getElementById('hardBtn');
+  
+}
+
+function adjustPlayButtonPosition() {
+  let screenWidth = window.innerWidth;
+  let screenHeight = window.innerHeight;
+  let playBtn = document.getElementById('playBtn');
+
+}
+
+function showDifficultyUI() {
+  document.getElementById('startUI').style.display = 'none';
+  document.getElementById('difficultyUI').style.display = 'block';
+}
+
+function selectDifficulty(difficulty) {
+  currentDifficulty = difficulty;
+  document.getElementById('difficultyUI').style.display = 'none';
+  document.getElementById('gameUI').style.display = 'block';
+  startNewLevel(difficulty);
+}
+
+window.onload = function () {
+  adjustButtonPosition();
+  adjustPlayButtonPosition();
+};
+
+window.onresize = function () {
+  adjustButtonPosition();
+  adjustPlayButtonPosition();
+};
 
 function getDifficulty(steps) {
   if (steps < 15) return 'tooEasy';
