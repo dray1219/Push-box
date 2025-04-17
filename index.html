@@ -62,17 +62,24 @@
     <button id="hardBtn" class="difficulty-btn" onclick="selectDifficulty('hard')"></button>
   </div>
 
-  <h1>推方塊-無限關卡</h1>
-  <div id="stepLimit"></div>
-  <div class="info" id="info"></div>
-  <div id="game"></div>
-  <button id="resetBtn">🔄 重製</button>
-  <button id="nextBtn" style="display:none;">➡️ 下一關</button>
-  <button id="retryBtn" style="display:none;">再試一次</button>
+  <div id="gameUI"></div>
+    <div id="gameWrapper">
+      <button id="backBtn"></button>
+    <h1 style="opacity: 0;">asd</h1>
+    <div id="stepLimit"></div>
+    <div class="info" id="info"></div>
+    <div id="game"></div>
+    <button id="resetBtn">🔄 重製</button>
+    <button id="nextBtn" style="display:none;">➡️ 下一關</button>
+    <button id="retryBtn" style="display:none;">再試一次</button>
+  </div>
 
   <script>
     let currentDifficulty = 'medium';
-
+    document.getElementById('backBtn').addEventListener('click', function () {
+      document.getElementById('gameUI').style.display = 'none';
+      document.getElementById('difficultyUI').style.display = 'block';
+    });
     function adjustButtonPosition() {
       let screenWidth = window.innerWidth;
       let screenHeight = window.innerHeight;
@@ -180,6 +187,7 @@
     function selectDifficulty(difficulty) {
       currentDifficulty = difficulty;
       document.getElementById('difficultyUI').style.display = 'none';
+      document.getElementById('gameUI').style.display = 'block';
       startNewLevel(difficulty);
     }
 
