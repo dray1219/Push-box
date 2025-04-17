@@ -5,7 +5,8 @@
 
 👉 [遊戲連結](https://dray1219.github.io/Push-box/)
 
-![image](https://github.com/user-attachments/assets/6bf040b9-fce5-4d85-ab39-8dea61bebce8)
+![image](https://github.com/user-attachments/assets/9f9256a6-ebf4-4e26-8de1-f2359ddfa605)
+
 
 ---
 
