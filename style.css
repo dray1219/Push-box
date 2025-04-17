@@ -100,6 +100,13 @@ td {
   color: white;
 }
 
+#levelIndicator {
+  display: flex;
+  justify-content: space-between;
+  font-size:25px;
+  margin: 10px;
+}
+
 #resetBtn,#nextBtn{
   font-size: 20px;
   padding: 12px 24px;

@@ -5,8 +5,46 @@ let startTime, steps = 0;
 let gameEnded = false;
 let perfectSteps = 0;  
 let currentDifficulty = 'medium';
+let levelProgress = { easy: 1, medium: 1, hard: 1 };
+let currentLevel = levelProgress[currentDifficulty] || 1;
+if (localStorage.getItem('levelProgress')) {
+  try {
+    const stored = JSON.parse(localStorage.getItem('levelProgress'));
+    ['easy','medium','hard'].forEach(d => {
+      if (stored[d] && Number.isInteger(stored[d]) && stored[d] > 0) {
+        levelProgress[d] = stored[d];
+      }
+    });
+  } catch {};
+}
+if (localStorage.getItem('currentDifficulty') && levelProgress[localStorage.getItem('currentDifficulty')] !== undefined) {
+  currentDifficulty = localStorage.getItem('currentDifficulty');
+}
+function stringToSeed(str) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash |= 0; 
+  }
+  return Math.abs(hash);
+}
+
+function mulberry32(a) {
+  return function() {
+    let t = a += 0x6D2B79F5;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function getSeed(difficulty, level) {
+  return `${difficulty}-${level}`;
+}
+
 
 document.getElementById('backBtn').addEventListener('click', function () {
+  localStorage.setItem('currentDifficulty', currentDifficulty);
   document.getElementById('gameUI').style.display = 'none';
   document.getElementById('difficultyUI').style.display = 'block';
 });
@@ -17,7 +55,7 @@ function adjustButtonPosition() {
   let easyBtn = document.getElementById('easyBtn');
   let middleBtn = document.getElementById('middleBtn');
   let hardBtn = document.getElementById('hardBtn');
-  
+
 }
 
 function adjustPlayButtonPosition() {
@@ -34,8 +72,11 @@ function showDifficultyUI() {
 
 function selectDifficulty(difficulty) {
   currentDifficulty = difficulty;
+  localStorage.setItem('currentDifficulty', currentDifficulty);
+  localStorage.setItem('levelProgress', JSON.stringify(levelProgress));
   document.getElementById('difficultyUI').style.display = 'none';
   document.getElementById('gameUI').style.display = 'block';
+  currentLevel = levelProgress[difficulty]; 
   startNewLevel(difficulty);
 }
 
@@ -56,7 +97,7 @@ function getDifficulty(steps) {
   return 'hard';
 }
 
-function generateLevel(width = 7, height = 7, desiredDifficulty = currentDifficulty) {
+function generateLevel(width = 7, height = 7, desiredDifficulty = currentDifficulty, rng = Math.random) {
   while (true) {
     let board = Array.from({ length: height }, () => Array(width).fill('.'));
     for (let i = 0; i < height; i++) 
@@ -71,12 +112,12 @@ function generateLevel(width = 7, height = 7, desiredDifficulty = currentDifficu
       }
     }
 
-    shuffle(empty);
+    shuffle(empty, rng);
     player = empty.pop();
     box = empty.pop();
     goal = empty.pop();
-
-    for (let i = 0; i < Math.floor(Math.random() * 6 + 3); i++) {
+    let wallsCount = Math.floor(rng() * 6 + 3);
+    for (let i = 0; i < wallsCount; i++) {
       const [x, y] = empty.pop();
       if (!(samePos([x, y], player) || samePos([x, y], box) || samePos([x, y], goal))) {
         board[x][y] = '#';
@@ -94,9 +135,9 @@ function generateLevel(width = 7, height = 7, desiredDifficulty = currentDifficu
   }
 }
 
-function shuffle(arr) {
+function shuffle(arr, rng = Math.random) {
   for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(rng() * (i + 1));
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
 }
@@ -227,6 +268,8 @@ function move(dir) {
     document.getElementById('nextBtn').style.display = 'inline-block';
     document.getElementById('resetBtn').style.display = 'none';
     gameEnded = true;
+    levelProgress[currentDifficulty]=++currentLevel;
+    localStorage.setItem('levelProgress', JSON.stringify(levelProgress));
   }
 
   const remaining = Math.max(0, perfectSteps - steps);
@@ -254,7 +297,10 @@ function resetLevel() {
 }
 
 function startNewLevel() {
-  map = generateLevel();
+  const rawSeed = getSeed(currentDifficulty, currentLevel);
+  const numericSeed = stringToSeed(rawSeed);
+  const rng = mulberry32(numericSeed);
+  map = generateLevel(7, 7, currentDifficulty, rng);
   originalPlayer = [...player];
   originalBox = [...box];
   steps = 0;
@@ -264,6 +310,7 @@ function startNewLevel() {
   document.getElementById('info').innerText = '';
   document.getElementById('nextBtn').style.display = 'none';
   document.getElementById('resetBtn').style.display = 'inline-block';
+  document.getElementById('levelIndicator').textContent = `關卡：${currentLevel}`;
 }
 
 document.addEventListener('keydown', e => {
