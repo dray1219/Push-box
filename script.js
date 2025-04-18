@@ -316,8 +316,10 @@ function startNewLevel() {
 document.addEventListener('keydown', e => {
   if (DIRS[e.key]) {
     move(e.key);
-  } else if (gameEnded && e.key === 'Enter' && samePos(box, goal)) {
-    startNewLevel(); 
+  } else if (gameEnded && samePos(box, goal)) {
+    if (e.key === 'Enter' || e.key === ' '){
+      startNewLevel(); 
+    }
   } else if (e.key === 'r' || e.key === 'R') {
     if (!gameEnded || !samePos(box, goal)) {
       resetLevel();
