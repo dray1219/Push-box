@@ -48,6 +48,17 @@ body {
   display: block;
 }
 
+#devImage {
+  position: fixed;
+  background: url('images/development.webp') no-repeat center center;
+  background-size: contain;
+  z-index: 500;
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  pointer-events: none;
+}
+
 #gameUI {
   position: fixed;
   z-index: -1;  
@@ -58,6 +69,7 @@ body {
   display: none;
   pointer-events: none;
 }
+
 
 table {
   border-collapse: collapse;
@@ -178,6 +190,17 @@ td {
   opacity: 0;            
 }
 
+#settingBtn {
+  position: absolute;
+  top: 4%;
+  left: 59.5%;
+  width: 4.5%;
+  height: 9%;
+  z-index: 10;
+  cursor: pointer;  
+  opacity: 0;            
+}
+
 /*手機通用(應該吧? */
 #playBtn {
   top: 57%;
@@ -236,9 +259,16 @@ td {
     width: 12%;
     height: 8%;
   }
+
+  #backBtn {
+    top: 11%;
+    left: 82%;
+    width: 12%;
+    height: 8%;
+  }
 }
 
-@media screen and (min-width: 400px) and (max-width: 490px) { /*XR */
+@media screen and (min-width: 400px) and (max-width: 490px) and (max-height: 900px){ /*XR */
   #playBtn {
     top: 58%;
     left: 20%;
@@ -267,12 +297,63 @@ td {
   }
 
   #backBtn {
-    top: 18%;
+    top: 19%;
     left: 6%;
     width: 12%;
     height: 5%;
   }
+
+  #settingBtn {
+    top: 19%;
+    left: 82%;
+    width: 12%;
+    height: 5%;
+  }
 }
+
+@media screen and (min-width: 400px) and (max-width: 430px) and (min-height:900px) and (max-height:930px) { /* A51 71 */
+  #playBtn {
+    top: 58%;
+    left: 20%;
+    width: 60%;
+    height: 10%;
+  }
+
+  #easyBtn, #middleBtn, #hardBtn {
+    left: 25%;
+    width: 50%;
+    height: 9%;
+  }
+
+  #easyBtn {
+    top: 39%;
+  }
+  #middleBtn {
+    top: 49%;
+  }
+  #hardBtn {
+    top: 60%;
+  }
+
+  #gameWrapper {
+    padding-top: 110px;
+  }
+
+  #backBtn {
+    top: 19.5%;
+    left: 6%;
+    width: 12%;
+    height: 5%;
+  }
+
+  #settingBtn {
+    top: 19.5%;
+    left: 82%;
+    width: 12%;
+    height: 5%;
+  }
+}
+
 
 @media screen and (min-width: 380px) and (max-width: 395px) { /*12pro */
   #playBtn {
@@ -314,6 +395,13 @@ td {
   #backBtn {
     top: 18%;
     left: 6%;
+    width: 12%;
+    height: 5%;
+  }
+
+  #settingBtn {
+    top: 18%;
+    left: 82%;
     width: 12%;
     height: 5%;
   }

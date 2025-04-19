@@ -264,7 +264,7 @@ function move(dir) {
   draw();
   if (samePos(box, goal)) {
     const timeUsed = ((Date.now() - startTime) / 1000).toFixed(2);
-    document.getElementById('info').innerText = `✅ 過關！用時：${timeUsed} 秒`;
+    document.getElementById('info').innerText = `過關！用時：${timeUsed} 秒`;
     document.getElementById('nextBtn').style.display = 'inline-block';
     document.getElementById('resetBtn').style.display = 'none';
     gameEnded = true;
@@ -275,7 +275,7 @@ function move(dir) {
   const remaining = Math.max(0, perfectSteps - steps);
 
   if (remaining <= 0 && !samePos(box, goal)) {
-    document.getElementById('info').innerText = "❌ 遊戲失敗，步數用完了！";
+    document.getElementById('info').innerText = "遊戲失敗，步數用完了！";
     document.getElementById('resetBtn').style.display = 'inline-block';
     document.getElementById('nextBtn').style.display = 'none';
     gameEnded = true;
@@ -374,3 +374,11 @@ document.addEventListener("contextmenu", e => e.preventDefault());
 document.body.addEventListener('touchmove', function (e) {
   e.preventDefault();
 }, { passive: false });
+
+document.getElementById('settingBtn').addEventListener('click', () => {
+  const devImage = document.getElementById('devImage');
+  devImage.style.display = 'block';
+  setTimeout(() => {
+    devImage.style.display = 'none';
+  }, 1500);
+});
