@@ -55,7 +55,7 @@ body {
   height: 100vh;
   background: url('images/development.webp') no-repeat center center;
   background-size: contain;
-  background-color: black;
+  /* background-color: black; */
   display: none;
 }
 
