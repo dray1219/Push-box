@@ -7,6 +7,7 @@ let perfectSteps = 0;
 let currentDifficulty = 'medium';
 let levelProgress = { easy: 1, medium: 1, hard: 1 };
 let currentLevel = levelProgress[currentDifficulty] || 1;
+let lastTouchEnd = 0;
 if (localStorage.getItem('levelProgress')) {
   try {
     const stored = JSON.parse(localStorage.getItem('levelProgress'));
@@ -382,3 +383,11 @@ document.getElementById('settingBtn').addEventListener('click', () => {
     devImage.style.display = 'none';
   }, 1500);
 });
+
+document.addEventListener('touchend', function (event) {
+  const now = new Date().getTime();
+  if (now - lastTouchEnd <= 300) {
+    event.preventDefault();
+  }
+  lastTouchEnd = now;
+}, false);
